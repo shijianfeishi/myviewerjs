@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Viewerjs</title>
+    <link rel="stylesheet" href="./js/viewer.min.css">
+    <script src="./js/viewer.min.js"></script>
+    <style>
+        #images li{
+            width: 150px;
+            height: 150px;
+            margin-right: 15px;
+            float: left;
+        }
+        #images li img{
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 显示一张图片 -->
+    <div>
+        <img id="image" src="" alt="Picture">
+    </div>
+    <!-- 显示多张图片 -->
+    <div>
+        <ul id="images"></ul>
+    </div>
+    <script>
+        window.onload = function(){
+            var url = 'http://icdn1.bangnijiao.cn/plat/2018/09/1d624a4e72047717d0594e2ad67961d0.png'
+            viewerpic(url,1) //显示一张图片
+
+            var list = [
+                'http://icdn1.bangnijiao.cn/plat/2018/09/1d624a4e72047717d0594e2ad67961d0.png',
+                'http://icdn1.bangnijiao.cn/plat/2018/09/db4687297d5c083c953df3b60fc94ce2.png'
+            ]
+            viewerpic(list,2,1) //显示多张图片
+        }
+        //图片放大插件 type = 1 ，一张图片；type = 2 ， 多张图片；num 多张图片的时候，显示第几张
+        function viewerpic(url,type,num){
+            var dom = ""
+            if(type != 2){
+                dom = document.getElementById("image");
+                dom.setAttribute("src",url);
+                dom.setAttribute("data-original",url);
+                var viewer = new Viewer(dom,{
+                    url: 'data-original',                                  
+                    navbar: false//点开查看的时候不显示缩略图
+                });
+                // dom.click();
+            }else{
+                dom = document.getElementById("images");
+                var str = "";
+                if(isArray(url) && url.length > 0){
+                    for(var i = 0 ; i < url.length ; i++){
+                        str += '<li><img data-original='+url[i]+' src='+url[i]+' alt='+ i +'></li>'
+                    }
+                    dom.innerHTML = str;
+                    var viewer = new Viewer(dom,{
+                        url: 'data-original',
+                        navbar: false//点开查看的时候不显示缩略图
+                    });
+                    // 自动触发显示
+                    // dom.children[num - 1].children[0].click();
+                }
+            }
+        }
+        // 判断是否为数组
+        function isArray(o){
+            return Object.prototype.toString.call(o)=='[object Array]';
+        }
+    </script>
+</body>
+</html>
